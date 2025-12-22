@@ -31,6 +31,16 @@ Urdu translation functionality per chapter
 Any backend services beyond preparatory Python structure (e.g., no live FastAPI server, no database integration)
 Standalone applications or non-Docusaurus outputs"
 
+## Clarifications
+
+### Session 2025-12-22
+
+- Q: What specific version and feature set of Docusaurus should be used for the interactive elements? → A: Latest stable version with search, code blocks, and responsive design
+- Q: How should the weekly breakdowns be logically mapped into module sections? → A: Weeks 1-2 as introduction module, Weeks 3-5 under Module 1, Weeks 6-8 under Module 2, etc.
+- Q: What level of TypeScript usage is expected in the frontend implementation? → A: Strict typing for all custom components and core functionality
+- Q: Does "no additions, speculative content" allow for brief explanations of complex terms within the provided content? → A: Yes, brief clarifications of complex terms are allowed
+- Q: How should the Context7 MCP server be integrated for docs fetching? → A: Via API calls during build process for content updates
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Access Interactive Book Content (Priority: P1)
@@ -91,6 +101,11 @@ Users access the book content from various devices (desktop, tablet, mobile) wit
 - **FR-006**: System MUST be responsive and accessible across different devices and screen sizes
 - **FR-007**: System MUST be version-controlled in the GitHub repository
 - **FR-008**: System MUST include a clear README with deployment instructions that allow setup within 10 minutes
+- **FR-009**: System MUST use latest stable Docusaurus version with search, code blocks, and responsive design features
+- **FR-010**: System MUST organize content with Weeks 1-2 as introduction module, Weeks 3-5 under Module 1, Weeks 6-8 under Module 2, etc.
+- **FR-011**: System MUST implement strict typing for all custom components and core functionality
+- **FR-012**: System MUST allow brief clarifications of complex terms while maintaining source content integrity
+- **FR-013**: System MUST integrate Context7 MCP server via API calls during build process for content updates
 
 ### Key Entities
 
