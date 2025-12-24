@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <style>
+    .module { fill: #4285f4; stroke: #1a73e8; stroke-width: 2; rx: 10; }
+    .text { fill: white; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-anchor: middle; }
+    .arrow { stroke: #5f6368; stroke-width: 2; marker-end: url(#arrowhead); }
+    .label { fill: #202124; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; text-anchor: middle; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5f6368" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#f8f9fa" />
+
+  <!-- Course Title -->
+  <text x="400" y="40" class="label">Physical AI & Humanoid Robotics Course</text>
+
+  <!-- Module 1 -->
+  <rect x="50" y="100" width="150" height="80" class="module" />
+  <text x="125" y="140" class="text">Module 1</text>
+  <text x="125" y="160" class="text">ROS2 Fundamentals</text>
+
+  <!-- Module 2 -->
+  <rect x="225" y="100" width="150" height="80" class="module" />
+  <text x="300" y="140" class="text">Module 2</text>
+  <text x="300" y="160" class="text">Simulation with</text>
+  <text x="300" y="175" class="text">Gazebo & Unity</text>
+
+  <!-- Module 3 -->
+  <rect x="400" y="100" width="150" height="80" class="module" />
+  <text x="475" y="140" class="text">Module 3</text>
+  <text x="475" y="160" class="text">NVIDIA Isaac</text>
+  <text x="475" y="175" class="text">Platform</text>
+
+  <!-- Module 4 -->
+  <rect x="575" y="100" width="150" height="80" class="module" />
+  <text x="650" y="140" class="text">Module 4</text>
+  <text x="650" y="160" class="text">Humanoid Robot</text>
+  <text x="650" y="175" class="text">Development</text>
+
+  <!-- Integration -->
+  <rect x="300" y="250" width="200" height="80" class="module" />
+  <text x="400" y="290" class="text">Integration</text>
+  <text x="400" y="310" class="text">Capstone Project</text>
+
+  <!-- Arrows from modules to integration -->
+  <line x1="125" y1="180" x2="350" y2="250" class="arrow" />
+  <line x1="300" y1="180" x2="375" y2="250" class="arrow" />
+  <line x1="475" y1="180" x2="425" y2="250" class="arrow" />
+  <line x1="650" y1="180" x2="450" y2="250" class="arrow" />
+
+  <!-- Backend -->
+  <rect x="350" y="380" width="100" height="60" class="module" />
+  <text x="400" y="410" class="text">Backend</text>
+  <text x="400" y="425" class="text">FastAPI</text>
+
+  <!-- Arrow from integration to backend -->
+  <line x1="400" y1="330" x2="400" y2="380" class="arrow" />
+
+  <!-- Claude Code -->
+  <rect x="50" y="400" width="150" height="60" class="module" />
+  <text x="125" y="430" class="text">Claude Code</text>
+  <text x="125" y="445" class="text">Agents & Skills</text>
+
+  <!-- Arrow between Claude Code and Backend -->
+  <line x1="200" y1="430" x2="350" y2="430" class="arrow" />
+</svg>
