@@ -57,6 +57,14 @@ Credentials: Provided for Qwen (DashScope API Key), Qdrant (Cluster endpoint and
 - Q: How to handle separate frontend/backend? → A: Docusaurus (TypeScript) for frontend chatbot UI component; FastAPI (Python) for backend RAG endpoints
 - Q: Integration of credentials? → A: Store in .env file; load via python-dotenv in backend
 - Q: Bonus implementations? → A: Optional but evaluated: Reuse Claude Code subagents/skills (Bonus 1); Better Auth for signup/signin with background questions (Bonus 2); Personalize chapter content via user data in Neon (Bonus 3); Urdu translation per chapter using Qwen's multilingual capabilities (Bonus 4)
+- Q: How should the RAG chatbot UI be embedded in the Docusaurus interface? → A: Floating widget that appears on all pages
+- Q: What specific tasks should the Claude Code subagents and skills perform for RAG functionality? → A: Enhance RAG queries with context and improve response accuracy
+- Q: How should the system handle errors in Qdrant/Neon connections for the RAG functionality? → A: Graceful fallback with user notifications when services are unavailable
+- Q: What exact model/version of Qwen embeddings should be used? → A: Use Qwen text-embedding-v4 via DashScope API as specified
+- Q: What deployment platform for the FastAPI backend is assumed? → A: Separate deployment from Docusaurus frontend, e.g., Railway, Heroku, or similar cloud platforms that support Python/ FastAPI
+- Q: What level of security is expected for .env credentials? → A: Store in .env file, exclude from version control via .gitignore, and use environment variables in production deployment
+- Q: How recent or up-to-date should the book content be for RAG indexing? → A: Content should be re-indexed during build process when book content changes
+- Q: How should Urdu translation be implemented per chapter for Bonus 4? → A: On-demand translation using Qwen's multilingual capabilities when user selects Urdu language option
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -152,7 +160,7 @@ Part 1 Functional Requirements (Unchanged)
 
 Part 2 Functional Requirements
 
-- **FR-014**: System MUST embed a RAG chatbot UI in Docusaurus (TypeScript component) that communicates with FastAPI backend
+- **FR-014**: System MUST embed a floating RAG chatbot widget in Docusaurus (TypeScript component) that appears on all pages and communicates with FastAPI backend
 - **FR-015**: Backend MUST use OpenAI Agents/ChatKit SDKs for agentic logic and chat completions (OpenAI-compatible)
 - **FR-016**: System MUST use Qwen text-embedding-v4 (DashScope API) for embeddings, with provided API key in .env
 - **FR-017**: System MUST store vectors in Qdrant Cloud (free tier) using provided endpoint and API key in .env
@@ -165,6 +173,10 @@ Part 2 Functional Requirements
 - **FR-024**: System MUST support Bonus 2: Signup/signin via Better Auth with user background questions
 - **FR-025**: System MUST support Bonus 3: Personalized chapter content based on user background stored in Neon
 - **FR-026**: System MUST support Bonus 4: Urdu translation per chapter: Users can access and navigate through all 4 core modules of the book within 30 seconds of landing on the site
+- **FR-027**: System MUST deploy backend (FastAPI) separately from frontend (Docusaurus), using cloud platforms like Railway or Heroku that support Python/FastAPI
+- **FR-028**: System MUST store credentials in .env file, exclude from version control, and use environment variables in production deployment
+- **FR-029**: System MUST re-index book content during build process when content changes to ensure RAG accuracy
+- **FR-030**: System MUST implement on-demand Urdu translation per chapter using Qwen's multilingual capabilities when user selects Urdu language option
 
 ### Key Entities
 
@@ -175,6 +187,10 @@ Part 2 Functional Requirements
 - **Vector Database**: Qdrant-based storage for book content embeddings used by the RAG system
 - **Embedding Engine**: Qwen-based service that converts text to vector representations for similarity search
 - **Backend API**: FastAPI-based service that handles chatbot queries and RAG processing
+- **Deployment Infrastructure**: Separate hosting for frontend (GitHub Pages) and backend (Railway/Heroku) with environment-based configuration
+- **Security Layer**: Environment variable management and credential handling system for API keys and database connections
+- **Translation Service**: On-demand multilingual translation using Qwen's capabilities for Urdu content
+- **Content Indexing System**: Automated re-indexing mechanism that updates vector database when book content changes
 
 ## Success Criteria *(mandatory)*
 
