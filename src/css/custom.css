@@ -1,0 +1,99 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+  /* Adjust sidebar for mobile */
+  .sidebar {
+    position: fixed;
+    z-index: 100;
+  }
+
+  /* Adjust main content for mobile */
+  .docMainContainer {
+    flex: 1;
+  }
+
+  /* Adjust code blocks for mobile */
+  .code-block {
+    margin: 0.5rem 0;
+  }
+
+  /* Adjust interactive code block for mobile */
+  .codeBlockPre {
+    padding: 0.5rem;
+  }
+
+  /* Adjust font sizes for better readability on small screens */
+  html {
+    font-size: 0.85rem;
+  }
+
+  /* Adjust sidebar navigation for mobile */
+  .menu {
+    padding: 0.5rem;
+  }
+
+  /* Adjust navbar for mobile */
+  .navbar {
+    padding: 0.5rem 0;
+  }
+
+  .navbar__item, .navbar__link {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for very small screens */
+  html {
+    font-size: 0.8rem;
+  }
+
+  .navbar__brand {
+    display: none;
+  }
+
+  .navbar__title {
+    display: inline;
+  }
+
+  .menu__list-item {
+    margin: 0.1rem 0;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding: 0 1rem;
+  }
+}

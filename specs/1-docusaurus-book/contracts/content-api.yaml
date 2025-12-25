@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: Docusaurus Book Content API
+  description: API for retrieving and searching book content (for Part 2 RAG features)
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+paths:
+  /content/search:
+    post:
+      summary: Search book content
+      description: Search through the book content for relevant sections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The search query
+                  example: "ROS2 fundamentals"
+                context:
+                  type: string
+                  description: Optional context to narrow search
+                  example: "module-1"
+              required:
+                - query
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ContentResult'
+                total:
+                  type: integer
+                  description: Total number of results
+  /content/{module}/{section}:
+    get:
+      summary: Get specific content section
+      description: Retrieve a specific section of the book content
+      parameters:
+        - name: module
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The module identifier
+        - name: section
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The section identifier
+      responses:
+        '200':
+          description: Content section
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentSection'
+components:
+  schemas:
+    ContentResult:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the content
+        title:
+          type: string
+          description: Title of the content section
+        content:
+          type: string
+          description: The content text
+        module:
+          type: string
+          description: Module this content belongs to
+        relevance:
+          type: number
+          description: Relevance score (0-1)
+    ContentSection:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the content
+        title:
+          type: string
+          description: Title of the content section
+        content:
+          type: string
+          description: The full content text
+        module:
+          type: string
+          description: Module this content belongs to
+        nextSection:
+          type: string
+          description: ID of the next section in sequence
+        prevSection:
+          type: string
+          description: ID of the previous section in sequence
+        related:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentResult'
