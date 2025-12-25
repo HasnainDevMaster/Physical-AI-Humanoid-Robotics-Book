@@ -1,0 +1,248 @@
+# API Contract: RAG Chatbot System
+
+## Base URL
+`https://api.yourdomain.com` (to be replaced with actual deployed backend URL)
+
+## Authentication
+Most endpoints are public, but some bonus features may require authentication via JWT tokens in the Authorization header.
+
+## Endpoints
+
+### 1. Chat Query Endpoint
+**POST** `/api/chat/query`
+
+**Description:** Process user queries and return RAG-enhanced responses based on book content
+
+**Request:**
+```json
+{
+  "query": "string (user's question)",
+  "context": {
+    "type": "full_content | selected_text",
+    "text": "string (optional, for selected text queries)",
+    "page": "string (optional, page context)"
+  },
+  "sessionId": "string (optional, for maintaining conversation context)",
+  "userId": "string (optional, for personalized responses)"
+}
+```
+
+**Response:**
+```json
+{
+  "id": "string (response ID)",
+  "response": "string (the AI-generated response)",
+  "sources": [
+    {
+      "title": "string (source document title)",
+      "url": "string (URL to source)",
+      "section": "string (section name)",
+      "similarity": "number (similarity score)"
+    }
+  ],
+  "sessionId": "string (session ID for continued conversation)",
+  "timestamp": "datetime (response timestamp)"
+}
+```
+
+**Success Response:**
+- Status: `200 OK`
+- Content-Type: `application/json`
+
+**Error Responses:**
+- `400 Bad Request` - Invalid request format
+- `429 Too Many Requests` - Rate limit exceeded
+- `500 Internal Server Error` - Backend processing error
+
+### 2. Health Check Endpoint
+**GET** `/api/health`
+
+**Description:** Check the health status of the RAG system
+
+**Response:**
+```json
+{
+  "status": "string (healthy | degraded | down)",
+  "services": {
+    "qdrant": "boolean (Qdrant connection status)",
+    "neon": "boolean (Neon DB connection status)",
+    "qwen": "boolean (Qwen API connection status)",
+    "cache": "boolean (Cache service status)"
+  },
+  "timestamp": "datetime"
+}
+```
+
+### 3. Content Index Endpoint
+**POST** `/api/content/index`
+
+**Description:** Index book content for RAG retrieval (requires admin authentication)
+
+**Request:**
+```json
+{
+  "content": "string (content to index)",
+  "metadata": {
+    "title": "string",
+    "module": "string",
+    "section": "string",
+    "url": "string"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": "boolean",
+  "indexedChunks": "number (count of indexed chunks)",
+  "contentId": "string (ID of indexed content)"
+}
+```
+
+### 4. User Profile Endpoint (Bonus)
+**GET** `/api/user/profile`
+
+**Description:** Get user profile information for personalization
+
+**Headers:**
+- Authorization: `Bearer {jwt_token}`
+
+**Response:**
+```json
+{
+  "id": "string",
+  "email": "string",
+  "name": "string",
+  "background": "string",
+  "preferences": {
+    "language": "string",
+    "theme": "string"
+  }
+}
+```
+
+### 5. Update User Profile Endpoint (Bonus)
+**PUT** `/api/user/profile`
+
+**Description:** Update user profile information for personalization
+
+**Headers:**
+- Authorization: `Bearer {jwt_token}`
+
+**Request:**
+```json
+{
+  "background": "string",
+  "preferences": {
+    "language": "string (e.g., 'en', 'ur')",
+    "theme": "string"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": "boolean",
+  "updatedFields": ["string"]
+}
+```
+
+### 6. Personalized Content Endpoint (Bonus)
+**POST** `/api/content/personalize`
+
+**Description:** Get personalized content based on user profile
+
+**Headers:**
+- Authorization: `Bearer {jwt_token}` (optional)
+
+**Request:**
+```json
+{
+  "contentId": "string",
+  "userId": "string (optional)",
+  "targetLanguage": "string (e.g., 'ur' for Urdu)"
+}
+```
+
+**Response:**
+```json
+{
+  "contentId": "string",
+  "originalContent": "string",
+  "personalizedContent": "string",
+  "language": "string",
+  "personalizationApplied": "boolean"
+}
+```
+
+### 7. Cache Status Endpoint
+**GET** `/api/cache/status`
+
+**Description:** Get cache statistics and status
+
+**Response:**
+```json
+{
+  "hitRate": "number (cache hit rate percentage)",
+  "totalEntries": "number (total cache entries)",
+  "memoryUsage": "number (memory usage in MB)",
+  "queriesSaved": "number (number of API calls saved by caching)"
+}
+```
+
+## Error Response Format
+All error responses follow this format:
+```json
+{
+  "error": {
+    "code": "string (error code)",
+    "message": "string (human-readable error message)",
+    "details": "object (optional, additional error details)",
+    "timestamp": "datetime"
+  }
+}
+```
+
+## Common Error Codes
+- `QUERY_PROCESSING_ERROR`: Error processing the user query
+- `VECTOR_RETRIEVAL_ERROR`: Error retrieving vectors from Qdrant
+- `EMBEDDING_GENERATION_ERROR`: Error generating embeddings
+- `EXTERNAL_SERVICE_UNAVAILABLE`: External service (Qwen, Qdrant, Neon) unavailable
+- `INVALID_REQUEST`: Request format is invalid
+- `RATE_LIMIT_EXCEEDED`: Request rate limit exceeded
+- `AUTHENTICATION_REQUIRED`: Authentication required for this endpoint
+- `UNAUTHORIZED_ACCESS`: Invalid or expired authentication token
+
+## Request/Response Examples
+
+### Example Query Request:
+```json
+{
+  "query": "What are the key challenges in humanoid robotics?",
+  "context": {
+    "type": "full_content"
+  },
+  "sessionId": "sess_abc123",
+  "userId": "user_def456"
+}
+```
+
+### Example Query Response:
+```json
+{
+  "id": "resp_789xyz",
+  "response": "The key challenges in humanoid robotics include balance and locomotion, kinematics and dynamics, perception and interaction, and control systems. For balance, the Zero Moment Point (ZMP) concept is crucial for maintaining stability.",
+  "sources": [
+    {
+      "title": "Humanoid Robot Development",
+      "url": "/module-4/humanoid-robot-development",
+      "section": "Key Challenges in Humanoid Robotics",
+      "similarity": 0.92
+    }
+  ],
+  "sessionId": "sess_abc123",
+  "timestamp": "2025-12-25T18:30:00Z"
+}
+```

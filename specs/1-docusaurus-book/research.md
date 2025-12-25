@@ -1,41 +1,53 @@
-# Research: Docusaurus Book Implementation
+# Research Document: RAG Chatbot Implementation
 
-## Decision: Docusaurus Version and Setup
-**Rationale**: Using Docusaurus v3 (latest stable) with TypeScript support to ensure modern features, good documentation, and community support. This aligns with the requirement for interactive elements and responsive design.
+## Decision: Backend Architecture
+**Rationale:** Separate FastAPI backend is needed for RAG processing to handle embeddings, vector storage, and complex AI operations that cannot be performed client-side. This aligns with the requirement for separate frontend/backend architecture.
+**Alternatives considered:** Serverless functions, monolithic architecture with Docusaurus - rejected due to computational requirements and security concerns.
 
-**Alternatives considered**:
-- Docusaurus v2: Stable but lacks newer features
-- GitBook: Good for books but less flexible for custom components
-- Custom React site: More control but more development time
+## Decision: Embedding Model Selection
+**Rationale:** Qwen text-embedding-v4 via DashScope API provides high-quality embeddings with good performance for the book content. This was specified in the requirements.
+**Alternatives considered:** OpenAI embeddings, local embedding models - Qwen was specified in requirements and offers good quality at reasonable cost.
 
-## Decision: Content Structure and Organization
-**Rationale**: Organizing content into 4 core modules with weekly breakdowns mapped logically follows the course structure. Using the hierarchy specified in the requirements ensures proper learning progression.
+## Decision: Vector Database
+**Rationale:** Qdrant Cloud provides managed vector database solution with good performance and free tier for development. This was specified in the requirements.
+**Alternatives considered:** Pinecone, Weaviate, local Chroma - Qdrant was specified in requirements and offers good performance.
 
-**Alternatives considered**:
-- Chronological organization: Less thematic coherence
-- Topic-based clustering: Might not follow course flow
-- Flat structure: Would lose the hierarchical learning path
+## Decision: Caching Strategy
+**Rationale:** Disk-based caching using diskcache library to prevent token exhaustion and improve response times for repeated queries. This addresses the requirement to reduce API calls by 80%+.
+**Alternatives considered:** Redis, in-memory cache - disk-based cache is simpler to deploy and sufficient for prototype.
 
-## Decision: TypeScript Implementation
-**Rationale**: Implementing strict typing for all custom components ensures code quality, maintainability, and reduces runtime errors. This aligns with the requirement for a professional educational resource.
+## Decision: Frontend Integration
+**Rationale:** Floating chat widget provides non-intrusive access to RAG functionality while maintaining focus on book content. This was specified in the requirements.
+**Alternatives considered:** Sidebar integration, dedicated page - floating widget allows access from any page without disrupting reading experience.
 
-**Alternatives considered**:
-- Basic TS/TSX: Less type safety
-- JavaScript: More flexible but less safe
-- Full strict mode: More rigorous but potentially overkill
+## Decision: Content Chunking Strategy
+**Rationale:** RecursiveCharacterTextSplitter with appropriate chunk size and overlap preserves context while enabling effective retrieval. This ensures the RAG system can properly understand and respond to queries about the book content.
+**Alternatives considered:** Sentence-based splitting, paragraph-based splitting - character-based splitting provides more consistent chunks.
 
-## Decision: Content Modification Policy
-**Rationale**: Allowing brief clarifications of complex terms while maintaining source content integrity ensures educational value while respecting the constraint of not adding speculative content.
+## Decision: Deployment Strategy
+**Rationale:** Separate deployment (GitHub Pages for frontend, Railway for backend) allows independent scaling and proper separation of concerns. This was specified in the requirements.
+**Alternatives considered:** Monolithic deployment, different cloud providers - current approach follows specified requirements.
 
-**Alternatives considered**:
-- Verbatim only: Might leave students confused by complex terms
-- Extensive additions: Would violate the "no additions" constraint
-- Contextual footnotes: Good compromise but more complex to implement
+## Decision: Security Approach
+**Rationale:** Environment variables for credentials with .env ignored by Git provides basic security for API keys. This follows the requirement to exclude credentials from version control.
+**Alternatives considered:** Secrets management services - environment variables are sufficient for prototype.
 
-## Decision: Context7 MCP Integration
-**Rationale**: Using API calls during build process ensures content stays current while maintaining build-time efficiency. This approach provides up-to-date documentation without runtime dependencies.
+## Decision: Selected Text Feature
+**Rationale:** Client-side text selection with context injection allows users to ask questions about specific content. This addresses the requirement for the chatbot to answer questions based on user-selected text.
+**Alternatives considered:** Highlight-based selection, server-side text extraction - client-side selection is simpler and more responsive.
 
-**Alternatives considered**:
-- Manual content import: Requires manual updates
-- Runtime API calls: Would add complexity and potential performance issues
-- Build-time with caching: More complex but similar result
+## Decision: Bonus Features Implementation
+**Rationale:** Implementing bonus features as specified (Better Auth, personalization, Urdu translation) maximizes project value and bonus points.
+**Alternatives considered:** Focusing only on core RAG functionality - bonus features were explicitly requested and add significant value.
+
+## Decision: API Contract Design
+**Rationale:** RESTful API with JSON responses provides a clean interface between frontend and backend. This ensures proper separation of concerns while maintaining simplicity.
+**Alternatives considered:** GraphQL, gRPC - REST is simpler for this use case and well-supported by both frontend and backend technologies.
+
+## Decision: Error Handling Strategy
+**Rationale:** Graceful fallback with user notifications when external services (Qdrant/Neon) are unavailable ensures good user experience even when dependencies fail. This was specified in the requirements.
+**Alternatives considered:** Silent failure, complete error pages - graceful fallback maintains functionality while informing users.
+
+## Decision: Content Indexing Workflow
+**Rationale:** Automated re-indexing during build process ensures content stays current when book content changes. This was specified in the requirements.
+**Alternatives considered:** Manual re-indexing, scheduled re-indexing - build-time re-indexing ensures consistency with deployed content.
