@@ -1,8 +1,9 @@
-# Feature Specification: Interactive Docusaurus Book for Physical AI & Humanoid Robotics
+# Feature Specification: Interactive Docusaurus Book with Integrated RAG Chatbot for Physical AI & Humanoid Robotics
 
 **Feature Branch**: `1-docusaurus-book`
 **Created**: 2025-12-22
-**Status**: Draft
+**Updated**: 2025-12-25
+**Status**: Draft (Part 1 Complete; Part 2 In Progress)
 **Input**: User description: "AI/Spec-Driven Book Creation – Part 1: Interactive Docusaurus Book
 Target audience: Students, researchers, and professionals in AI and robotics with a computer science background; interested in Physical AI, embodied intelligence, and humanoid robotics.
 Focus: Create and deploy a complete, high-quality, interactive web-based book using Docusaurus that fully documents the course 'Physical AI & Humanoid Robotics.' The book must be structured around 4 core modules, with content organized into chapters and sections reflecting the provided weekly breakdowns. Development must be AI/spec-driven tion/content.
@@ -31,15 +32,31 @@ Urdu translation functionality per chapter
 Any backend services beyond preparatory Python structure (e.g., no live FastAPI server, no database integration)
 Standalone applications or non-Docusaurus outputs"
 
+Part 2 Input: "AI/Spec-Driven Book Creation – Part 2: Integrated RAG Chatbot Development
+Build and embed a Retrieval-Augmented Generation (RAG) chatbot within the published book. This chatbot, utilizing the OpenAI Agents/ChatKit SDKs, FastAPI, Neon Postgres Database, and Qdrant Cloud Free Tier, must be able to answer user questions about the book's content, including answering questions based only on text selected by the user.
+Bonus Points System as specified.
+Using OpenAI chat completions with Qwen for embeddings. Must use caching layer to prevent token exhaustion.
+Backend and frontend separate.
+Direct Claude Code to edit and update the current spec.md in directory 1-docusaurus-book.
+Credentials: Provided for Qwen (DashScope API Key), Qdrant (Cluster endpoint and API Key), Neon (Connection string)."
+
 ## Clarifications
 
-### Session 2025-12-22
+### Session 2025-12-22 (Part 1)
 
 - Q: What specific version and feature set of Docusaurus should be used for the interactive elements? → A: Latest stable version with search, code blocks, and responsive design
 - Q: How should the weekly breakdowns be logically mapped into module sections? → A: Weeks 1-2 as introduction module, Weeks 3-5 under Module 1, Weeks 6-8 under Module 2, etc.
 - Q: What level of TypeScript usage is expected in the frontend implementation? → A: Strict typing for all custom components and core functionality
 - Q: Does "no additions, speculative content" allow for brief explanations of complex terms within the provided content? → A: Yes, brief clarifications of complex terms are allowed
 - Q: How should the Context7 MCP server be integrated for docs fetching? → A: Via API calls during build process for content updates
+
+### Session 2025-12-25 (Part 2)
+
+- Q: How to integrate Qwen embeddings with OpenAI-compatible completions? → A: Use DashScope API for Qwen text-embedding-v4 embeddings; leverage OpenAI Agents/ChatKit SDKs for agentic logic and chat completions (compatible endpoints if needed)
+- Q: What caching layer to use for token exhaustion prevention? → A: Implement a simple local file-based cache or Redis free tier for embedding results and query responses
+- Q: How to handle separate frontend/backend? → A: Docusaurus (TypeScript) for frontend chatbot UI component; FastAPI (Python) for backend RAG endpoints
+- Q: Integration of credentials? → A: Store in .env file; load via python-dotenv in backend
+- Q: Bonus implementations? → A: Optional but evaluated: Reuse Claude Code subagents/skills (Bonus 1); Better Auth for signup/signin with background questions (Bonus 2); Personalize chapter content via user data in Neon (Bonus 3); Urdu translation per chapter using Qwen's multilingual capabilities (Bonus 4)
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -83,11 +100,35 @@ Users access the book content from various devices (desktop, tablet, mobile) wit
 
 ---
 
-### Edge Cases
+### Part 2 User Stories
+### User Story 4 - Query Book Content via RAG Chatbot (Priority: P1)
 
-- What happens when users access the book with limited internet connectivity?
-- How does the system handle users with different accessibility needs?
-- What if the GitHub Pages deployment fails?
+Users ask questions about the book's content through an embedded chatbot, receiving accurate, context-aware responses based on the full book or selected text.
+**Why this priority**: The RAG chatbot is the core feature of Part 2, enabling interactive Q&A to enhance learning.
+**Independent Test**: Users input queries in the chatbot UI and receive relevant responses drawn from book content.
+**Acceptance Scenarios**:
+1. **Given** a user asks a question about a module, **When** the chatbot processes it, **Then** the response is accurate and cites book sections
+2. **Given** a user selects text and queries based on it, **When** the chatbot responds, **Then** it uses only the selected text as context
+
+---
+### User Story 5 - Experience Bonus Features (Priority: P2)
+
+Users benefit from optional bonuses: Authentication for personalized experiences, content personalization based on background, and Urdu translation.
+**Why this priority**: Bonuses add value and points; they extend core functionality.
+**Independent Test**: If implemented, users can sign up, see personalized content, and toggle Urdu translation.
+**Acceptance Scenarios**:
+1. **Given** a user signs up with background info, **When** they view a chapter, **Then** content is personalized
+2. **Given** a user selects Urdu mode, **When** viewing a chapter, **Then** content translates accurately
+
+---
+
+### Edge Cases (Updated for Part 2)
+
+- What happens when users access the book with limited internet connectivity? (Chatbot may fallback to cached responses)
+- How does the system handle users with different accessibility needs? (Ensure chatbot UI is accessible)
+- What if the GitHub Pages deployment fails? (Fallback to local dev)
+- What if Qwen API quota exhausts? (Use caching to minimize calls)
+- How to handle invalid or out-of-context queries in chatbot?
 
 ## Requirements *(mandatory)*
 
@@ -107,11 +148,33 @@ Users access the book content from various devices (desktop, tablet, mobile) wit
 - **FR-012**: System MUST allow brief clarifications of complex terms while maintaining source content integrity
 - **FR-013**: System MUST integrate Context7 MCP server via API calls during build process for content updates
 
+Part 1 Functional Requirements (Unchanged)
+
+Part 2 Functional Requirements
+
+- **FR-014**: System MUST embed a RAG chatbot UI in Docusaurus (TypeScript component) that communicates with FastAPI backend
+- **FR-015**: Backend MUST use OpenAI Agents/ChatKit SDKs for agentic logic and chat completions (OpenAI-compatible)
+- **FR-016**: System MUST use Qwen text-embedding-v4 (DashScope API) for embeddings, with provided API key in .env
+- **FR-017**: System MUST store vectors in Qdrant Cloud (free tier) using provided endpoint and API key in .env
+- **FR-018**: System MUST use Neon Postgres for metadata/storage (e.g., user data for bonuses) with provided connection string in .env
+- **FR-019**: Chatbot MUST answer queries based on full book content or user-selected text only
+- **FR-020**: System MUST implement a caching layer (e.g., local file or Redis free tier) for embeddings and responses to prevent token exhaustion
+- **FR-021**: Backend (FastAPI/Python) and frontend (Docusaurus/TS) MUST be separate, with API endpoints for query handling
+- **FR-022**: Claude Code MUST be directed to edit/update this spec.md file in the 1-docusaurus-book directory as needed
+- **FR-023**: System MUST support Bonus 1: Reusable Claude Code subagents/skills for RAG tasks
+- **FR-024**: System MUST support Bonus 2: Signup/signin via Better Auth with user background questions
+- **FR-025**: System MUST support Bonus 3: Personalized chapter content based on user background stored in Neon
+- **FR-026**: System MUST support Bonus 4: Urdu translation per chapter: Users can access and navigate through all 4 core modules of the book within 30 seconds of landing on the site
+
 ### Key Entities
 
 - **Book Content**: The educational material about Physical AI & Humanoid Robotics organized in modules and sections
 - **Book Structure**: The hierarchical organization of content in 4 core modules with weekly breakdowns
 - **User Interface**: The Docusaurus-based presentation layer that displays content to users
+- **RAG Chatbot**: The Retrieval-Augmented Generation chatbot that answers user questions based on book content
+- **Vector Database**: Qdrant-based storage for book content embeddings used by the RAG system
+- **Embedding Engine**: Qwen-based service that converts text to vector representations for similarity search
+- **Backend API**: FastAPI-based service that handles chatbot queries and RAG processing
 
 ## Success Criteria *(mandatory)*
 
@@ -122,3 +185,11 @@ Users access the book content from various devices (desktop, tablet, mobile) wit
 - **SC-003**: 90% of users can successfully navigate between different sections of the book without encountering broken links
 - **SC-004**: The book content accurately reflects the 4 core modules with weekly breakdowns as specified in requirements
 - **SC-005**: The repository includes clear README documentation with deployment instructions that allow setup within 10 minutes
+
+Part 2 Measurable Outcomes
+
+- **SC-006**: Chatbot responds to 90% of test queries accurately within 5 seconds, using book content only
+- **SC-007**: Selected-text queries limit responses to provided context with 100% fidelity
+- **SC-008**: Caching reduces API calls by 80% on repeated queries, preventing token exhaustion
+- **SC-009**: Base score 100 for core RAG; up to 50 each for bonuses (total possible 300)
+- **SC-010**: System deploys with separate backend (e.g., on Railway or similar hosting)
