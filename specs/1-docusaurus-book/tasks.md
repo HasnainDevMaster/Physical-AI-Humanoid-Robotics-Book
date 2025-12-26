@@ -255,3 +255,100 @@ With multiple developers:
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
+
+---
+
+# Part 2: RAG Chatbot System Implementation Tasks
+
+## Phase 3: User Story 4 - Query Book Content via RAG Chatbot (Priority: P1) 🎯 MVP
+
+**Goal**: Users ask questions about the book's content through an embedded chatbot, receiving accurate, context-aware responses based on the full book or selected text.
+
+**Independent Test**: Users input queries in the chatbot UI and receive relevant responses drawn from book content.
+
+### Tests for User Story 4 (OPTIONAL - only if tests requested) ⚠️
+
+> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+
+- [ ] T065 [P] [US4] Manual test for basic chatbot query functionality
+- [ ] T066 [P] [US4] Manual test for selected-text context query functionality
+
+### Implementation for User Story 4
+
+- [ ] T067 [P] [US4] Create backend directory structure in `backend/` with app, api, models, schemas, database, and utils subdirectories
+- [ ] T068 [P] [US4] Set up Python virtual environment and install dependencies (FastAPI, uvicorn, python-dotenv, langchain-community, qdrant-client, openai, diskcache)
+- [ ] T069 [US4] Create requirements.txt with all backend dependencies
+- [ ] T070 [US4] Set up FastAPI application structure with main.py entry point
+- [ ] T071 [P] [US4] Create API routes structure (chat.py, content.py, user.py) in `backend/app/api/`
+- [ ] T072 [P] [US4] Implement environment variable loading with python-dotenv
+- [ ] T073 [P] [US4] Create data models for entities (BookContent, ChatSession, ChatMessage, etc.) in `backend/app/models/`
+- [ ] T074 [P] [US4] Create Pydantic schemas for API requests/responses in `backend/app/schemas/`
+- [ ] T075 [US4] Create Claude Code agent files (EmbeddingAgent.md, RetrieverAgent.md, ChatbotAgent.md) in `.claude/agents/`
+- [ ] T076 [P] [US4] Create Claude Code skill directories (CachingSkill, SelectedTextSkill, UrduTranslationSkill) in `.claude/skills/`
+- [ ] T077 [US4] Implement Qwen text-embedding-v4 integration with DashScope API
+- [ ] T078 [US4] Create content chunking functionality using RecursiveCharacterTextSplitter
+- [ ] T079 [US4] Create index_content.py script for content indexing in `backend/`
+- [ ] T080 [P] [US4] Implement content indexing script to extract from Docusaurus docs and store in Qdrant
+- [ ] T081 [US4] [P] Create chat query endpoint with RAG logic in `backend/app/api/chat.py`
+- [ ] T082 [US4] [P] Implement vector retrieval from Qdrant with metadata filtering
+- [ ] T083 [US4] [P] Add citation mechanism to return source information with responses
+- [ ] T084 [US4] [P] Implement caching layer for embeddings and responses
+- [ ] T085 [US4] [P] Add error handling and graceful fallback for external services
+- [ ] T086 [US4] [P] Create selected-text context injection functionality
+- [ ] T087 [US4] [P] Implement response validation to ensure content fidelity
+- [ ] T088 [US4] [P] Add performance monitoring for response times
+- [ ] T089 [US4] Create floating chatbot UI component in `src/components/Chatbot/Chatbot.tsx`
+- [ ] T090 [US4] [P] Implement chat interface with message history in Chatbot component
+- [ ] T091 [US4] [P] Add global text selection listener for context capture
+- [ ] T092 [US4] [P] Create API client to communicate with backend endpoints
+- [ ] T093 [US4] [P] Implement loading states and error handling in UI
+- [ ] T094 [US4] [P] Style chatbot widget with CSS in Chatbot.module.css
+- [ ] T095 [US4] Update docusaurus.config.js to include backend API URL configuration
+- [ ] T096 [US4] Test end-to-end RAG flow with sample queries
+- [ ] T097 [US4] Validate selected-text queries limit responses to provided context
+
+## Phase 4: User Story 5 - Experience Bonus Features (Priority: P2)
+
+**Goal**: Users benefit from optional bonuses: Authentication for personalized experiences, content personalization based on background, and Urdu translation.
+
+**Independent Test**: If implemented, users can sign up, see personalized content, and toggle Urdu translation.
+
+### Tests for User Story 5 (OPTIONAL - only if tests requested) ⚠️
+
+- [ ] T098 [P] [US5] Manual test for user authentication flow
+- [ ] T099 [P] [US5] Manual test for content personalization functionality
+
+### Implementation for User Story 5
+
+- [ ] T100 [US5] Implement Better Auth integration for user signup/signin
+- [ ] T101 [US5] [P] Create user profile management endpoints in `backend/app/api/user.py`
+- [ ] T102 [US5] [P] Implement user data storage in Neon Postgres
+- [ ] T103 [US5] [P] Create user background collection during signup
+- [ ] T104 [US5] [P] Implement content personalization based on user background
+- [ ] T105 [US5] [P] Create personalized content storage model
+- [ ] T106 [US5] [P] Implement on-demand Urdu translation using Qwen capabilities
+- [ ] T107 [US5] [P] Add language preference management in user profiles
+- [ ] T108 [US5] [P] Create content translation API endpoint
+- [ ] T109 [US5] [P] Update frontend to support language switching
+- [ ] T110 [US5] Test bonus feature integration with core RAG functionality
+
+## Phase 5: Deployment & Polish
+
+**Goal**: Deploy the RAG system with proper configuration and finalize the implementation
+
+- [ ] T111 [P] Create deployment configuration for Railway backend
+- [ ] T112 [P] Update GitHub Pages deployment for frontend with backend URL
+- [ ] T113 [P] Add comprehensive API documentation
+- [ ] T114 [P] Create README updates with RAG system setup instructions
+- [ ] T115 [P] Perform end-to-end testing of all RAG features
+- [ ] T116 [P] Optimize performance and fix any bottlenecks
+- [ ] T117 [P] Update spec.md with final RAG implementation details
+- [ ] T118 [P] Clean up unused code and documentation
+- [ ] T119 [P] Final quality assurance and bug fixes for RAG system
+
+## Success Criteria Validation for RAG System
+
+- [ ] SC-006: Chatbot responds to 90% of test queries accurately within 5 seconds
+- [ ] SC-007: Selected-text queries limit responses to provided context with 100% fidelity
+- [ ] SC-008: Caching reduces API calls by 80% on repeated queries
+- [ ] SC-010: System deploys with separate backend (e.g., on Railway)
